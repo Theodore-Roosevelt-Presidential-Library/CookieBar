@@ -438,7 +438,7 @@
 
   function attach() {
     if (!W.Termly || typeof W.Termly.on !== 'function') return false;
-    if (W.__trplCookieBarAttached) return true;
+    if (W.__trplCookieBarAttached || W.__trplCookieBarHooked) return true;
     W.__trplCookieBarAttached = true;
     W.Termly.on('initialized', onInitialized);
     W.Termly.on('consent', onConsent);
@@ -476,8 +476,8 @@
     if (attach()) return;
     var tries = 0;
     var t = setInterval(function () {
-      if (attach() || ++tries > 100) clearInterval(t);
-    }, 100);
+      if (attach() || ++tries > 400) clearInterval(t);
+    }, 25);
   }
 
   if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', start);

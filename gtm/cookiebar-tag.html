@@ -1,0 +1,38 @@
+<!--
+  GTM Custom HTML tag: "CookieBar - Loader"
+  Trigger: Consent Initialization - All Pages
+  Tag firing priority: 100 (fires before the Termly tag in the same trigger)
+  Consent settings: No additional consent required (it stores only the visitor's choice)
+
+  Listens for Termly the moment Termly's script appears, so CookieBar receives
+  Termly's "initialized" event (visitor location) even though Termly is
+  injected by its own GTM template tag. Then loads cookiebar.js.
+-->
+<script>
+(function () {
+  if (window.__trplCookieBarBoot) return;
+  window.__trplCookieBarBoot = true;
+  window.__trplCookieBarQueueing = true;
+  window.TRPLCookieBar = window.TRPLCookieBar || { q: [] };
+
+  function hook(T) {
+    if (!T || typeof T.on !== 'function' || window.__trplCookieBarHooked) return false;
+    window.__trplCookieBarHooked = true;
+    T.on('initialized', function (d) { window.TRPLCookieBar.q.push(['initialized', d]); });
+    T.on('consent', function (d) { window.TRPLCookieBar.q.push(['consent', d]); });
+    return true;
+  }
+
+  if (!hook(window.Termly)) {
+    var n = 0;
+    var t = setInterval(function () {
+      if (hook(window.Termly) || ++n > 800) clearInterval(t); // ~20 seconds
+    }, 25);
+  }
+
+  var s = document.createElement('script');
+  s.src = 'https://cookiebar.labs.trlibrary.com/cookiebar.js';
+  s.async = true;
+  document.head.appendChild(s);
+})();
+</script>
