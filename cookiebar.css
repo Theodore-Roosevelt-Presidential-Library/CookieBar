@@ -1,0 +1,275 @@
+/*
+ * TRPL CookieBar — brand layer for the Termly consent banner.
+ * Brand source: https://brand.labs.trlibrary.com (tokens/tokens.css)
+ * Palette: Dark Gray background + Gray Sky (support, an approved pairing), with
+ * Deep Orange only on buttons ("Deep Orange means act"). Contrast, from the
+ * brand table: White on Dark Gray 14.8 AAA · Sand on Dark Gray 9.2 AAA ·
+ * Gray Sky on Dark Gray 6.5 AA · Dark Gray on Deep Orange 5.4 AA.
+ * To switch the background, change --cb-bg (Night Sky #092A4D also passes).
+ *
+ * Termly targets: only [data-termly-part] attributes (Termly's documented,
+ * stable hooks). Class names are generated and change without notice.
+ */
+
+:root {
+  --cb-bg: #25282A;          /* Dark Gray */
+  --cb-deep-orange: #E7805D;
+  --cb-gray-sky: #99ADC5;
+  --cb-sand: #D1CCBD;
+  --cb-dark-gray: #25282A;
+  --cb-white: #FFFFFF;
+  --cb-font-display: "Dharma Gothic E", Impact, "Arial Narrow", sans-serif;
+  --cb-font-body: "ITC Clearface", Clearface, Georgia, "Times New Roman", serif;
+  --cb-font-caption: "Frutiger Next", Frutiger, Arial, Helvetica, sans-serif;
+}
+
+/* ---------- Termly banner (slim bottom bar) ---------- */
+
+[data-termly-part="consent-banner"] {
+  background: var(--cb-bg) !important;
+  color: var(--cb-white) !important;
+  font-family: var(--cb-font-body) !important;
+  border: 0 !important;
+  border-top: 2px solid var(--cb-deep-orange) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 10px 20px !important;
+}
+
+[data-termly-part="banner-message"],
+[data-termly-part="banner-message"] p,
+[data-termly-part="banner-message"] span {
+  color: var(--cb-white) !important;
+  font-family: var(--cb-font-body) !important;
+  font-size: 14px !important;
+  line-height: 1.45 !important;
+  text-align: left !important;
+  hyphens: none !important;
+  margin: 0 !important;
+}
+
+[data-termly-part="banner-message"] a {
+  color: var(--cb-sand) !important;
+  text-decoration: underline !important;
+  text-underline-offset: 2px;
+}
+
+[data-termly-part="banner-actions"] { gap: 8px !important; }
+
+[data-termly-part="banner-actions"] button {
+  font-family: var(--cb-font-caption) !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  border-radius: 2px !important;
+  padding: 8px 14px !important;
+  margin: 0 !important;
+  min-height: 0 !important;
+  background: var(--cb-deep-orange) !important;
+  border: 1px solid var(--cb-deep-orange) !important;
+  color: var(--cb-dark-gray) !important;
+}
+
+[data-termly-part="banner-actions"] button:hover {
+  background: #d07556 !important;
+  border-color: #d07556 !important;
+}
+
+[data-termly-part="banner-actions"] button:focus-visible,
+.trpl-cb button:focus-visible,
+.trpl-cb a:focus-visible,
+.trpl-cb-tab:focus-visible {
+  outline: 2px solid var(--cb-sand) !important;
+  outline-offset: 2px;
+}
+
+/* ---------- Info tabs (Why this? · What's collected · If you decline) ---------- */
+
+.trpl-cb-info { margin-top: 6px; }
+
+.trpl-cb-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 16px;
+}
+
+.trpl-cb-tab,
+[data-termly-part="consent-banner"] .trpl-cb-tab {
+  appearance: none;
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 2px solid transparent !important;
+  border-radius: 0 !important;
+  padding: 3px 0 !important;
+  margin: 0 !important;
+  cursor: pointer;
+  font-family: var(--cb-font-caption) !important;
+  font-weight: 700 !important;
+  font-size: 12px !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0.01em;
+  color: var(--cb-gray-sky) !important;
+  white-space: nowrap;
+}
+
+.trpl-cb-tab:hover,
+[data-termly-part="consent-banner"] .trpl-cb-tab:hover { color: var(--cb-white) !important; }
+
+.trpl-cb-tab[aria-selected="true"],
+[data-termly-part="consent-banner"] .trpl-cb-tab[aria-selected="true"] {
+  color: var(--cb-white) !important;
+  border-bottom-color: var(--cb-deep-orange) !important;
+}
+
+.trpl-cb-tab:focus-visible { outline: 2px solid var(--cb-sand) !important; outline-offset: 2px; }
+
+.trpl-cb-panel,
+[data-termly-part="banner-message"] .trpl-cb-panel {
+  margin: 6px 0 2px;
+  max-width: 80ch;
+  font-family: var(--cb-font-body) !important;
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+  color: var(--cb-white) !important;
+}
+
+.trpl-cb-panel[hidden] { display: none !important; }
+
+.trpl-cb-panel--why.has-shape {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.trpl-cb-shape {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  overflow: visible;
+}
+
+.trpl-cb-shape path {
+  fill: rgba(209, 204, 189, 0.14);   /* Sand, light wash */
+  stroke: var(--cb-sand);
+  stroke-width: 1.5px;
+  stroke-linejoin: round;
+}
+
+.trpl-cb-why-text .trpl-cb-place {
+  display: block;
+  margin-bottom: 1px;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.trpl-cb-panel .trpl-cb-place {
+  font-family: var(--cb-font-caption);
+  font-weight: 700;
+  color: var(--cb-sand);
+}
+
+.trpl-cb-panel a {
+  color: var(--cb-sand) !important;
+  text-decoration: underline !important;
+  text-underline-offset: 2px;
+}
+
+/* ---------- CookieBar's own bars (decline note, session re-ask) ---------- */
+
+.trpl-cb {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2147483000;
+  background: var(--cb-bg);
+  color: var(--cb-white);
+  border-top: 2px solid var(--cb-deep-orange);
+  font-family: var(--cb-font-body);
+  transform: translateY(110%);
+  transition: transform 0.2s ease;
+}
+
+.trpl-cb.is-open { transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .trpl-cb { transition: none; }
+}
+
+.trpl-cb-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px 20px;
+}
+
+.trpl-cb-text {
+  flex: 1 1 auto;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.trpl-cb-text p { margin: 0; }
+
+.trpl-cb-text strong.trpl-cb-lead {
+  font-family: var(--cb-font-caption);
+  font-weight: 700;
+  color: var(--cb-white);
+  margin-right: 4px;
+}
+
+.trpl-cb-actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.trpl-cb-btn {
+  appearance: none;
+  cursor: pointer;
+  font-family: var(--cb-font-caption);
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1;
+  border-radius: 2px;
+  padding: 8px 14px;
+  background: var(--cb-deep-orange);
+  border: 1px solid var(--cb-deep-orange);
+  color: var(--cb-dark-gray);
+  white-space: nowrap;
+}
+
+.trpl-cb-btn:hover { background: #d07556; border-color: #d07556; }
+
+.trpl-cb-btn--ghost {
+  background: transparent;
+  border-color: var(--cb-gray-sky);
+  color: var(--cb-white);
+}
+
+.trpl-cb-btn--ghost:hover { background: rgba(153, 173, 197, 0.18); border-color: var(--cb-gray-sky); }
+
+.trpl-cb-close {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  color: var(--cb-gray-sky);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 6px;
+}
+
+.trpl-cb-close:hover { color: var(--cb-white); }
+
+@media (max-width: 720px) {
+  [data-termly-part="consent-banner"] { padding: 10px 14px !important; }
+  .trpl-cb-inner { flex-wrap: wrap; padding: 10px 14px; }
+  .trpl-cb-text { flex-basis: calc(100% - 40px); }
+  .trpl-cb-actions { order: 3; flex: 1 1 100%; }
+  .trpl-cb-btn { flex: 1 1 auto; }
+}

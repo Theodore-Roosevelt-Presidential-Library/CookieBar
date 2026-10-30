@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CookieBar · TRPL Labs</title>
+<meta name="description" content="The Theodore Roosevelt Presidential Library's cookie consent layer: Termly's consent engine with the Library's brand and a plain explanation of the privacy law where each visitor is.">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://brand.labs.trlibrary.com/assets/fonts/web/fonts.css">
+<style>
+  :root {
+    --night-sky: #092A4D; --deep-orange: #E7805D; --gray-sky: #99ADC5; --sand: #D1CCBD; --dark-gray: #25282A; --white: #fff;
+    --display: "Dharma Gothic E", Impact, "Arial Narrow", sans-serif;
+    --body: "ITC Clearface", Georgia, "Times New Roman", serif;
+    --caption: "Frutiger Next", Arial, Helvetica, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--white); color: var(--dark-gray); font-family: var(--body); font-size: 17px; line-height: 1.55; }
+  header { background: var(--dark-gray); color: var(--white); padding: 48px 16px 40px; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 16px; }
+  header .wrap { padding: 0; }
+  .eyebrow { font-family: var(--caption); font-weight: 700; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--sand); margin: 0 0 10px; }
+  h1 { font-family: var(--display); font-weight: 700; text-transform: uppercase; font-size: clamp(48px, 9vw, 84px); line-height: .85; letter-spacing: .01em; margin: 0 0 16px; }
+  header p { max-width: 62ch; margin: 0; color: var(--white); }
+  h2 { font-family: var(--display); font-weight: 700; text-transform: uppercase; font-size: 34px; line-height: .85; color: var(--dark-gray); margin: 44px 0 12px; }
+  main { padding-bottom: 260px; }
+  .panel { border: 1px solid #d9dee6; border-radius: 2px; padding: 20px; margin-top: 16px; }
+  label { font-family: var(--caption); font-weight: 700; font-size: 14px; display: block; margin-bottom: 6px; }
+  select { font-family: var(--caption); font-size: 16px; padding: 10px 12px; min-width: 260px; max-width: 100%; border: 1px solid var(--dark-gray); border-radius: 2px; background: var(--white); color: var(--dark-gray); }
+  .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; }
+  .btn { font-family: var(--caption); font-weight: 700; font-size: 15px; padding: 12px 20px; border-radius: 2px; border: 1px solid var(--deep-orange); background: var(--deep-orange); color: var(--dark-gray); cursor: pointer; }
+  .btn--ghost { background: transparent; border-color: var(--dark-gray); color: var(--dark-gray); }
+  .note { font-family: var(--caption); font-size: 14px; color: #4a4f55; margin-top: 12px; }
+  pre { background: var(--dark-gray); color: #f1f1f1; padding: 16px; overflow-x: auto; font-size: 13px; line-height: 1.5; border-radius: 2px; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  ul { padding-left: 1.2em; }
+  li { margin: 6px 0; }
+  a { color: var(--dark-gray); text-underline-offset: 3px; }
+  #record { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; white-space: pre-wrap; word-break: break-word; }
+  footer { font-family: var(--caption); font-size: 13px; color: #4a4f55; padding: 24px 16px 40px; border-top: 1px solid #e3e6eb; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <p class="eyebrow">TRPL Labs</p>
+    <h1>CookieBar</h1>
+    <p>A cookie consent bar that appears only where privacy law calls for it, tells visitors which law applies where they are, and carries the Library's brand. Termly does the legal work underneath: location, blocking, consent records and Google Consent Mode.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <h2>Try it</h2>
+  <div class="panel">
+    <div class="row">
+      <div>
+        <label for="region">Pretend to visit from</label>
+        <select id="region">
+          <option value="US-CA">California</option>
+          <option value="US-CO">Colorado</option>
+          <option value="US-TX">Texas</option>
+          <option value="US-VA">Virginia</option>
+          <option value="US-ND">North Dakota (no bar)</option>
+          <option value="FR">France</option>
+          <option value="DE">Germany</option>
+          <option value="NO">Norway</option>
+          <option value="GB">United Kingdom</option>
+          <option value="CH">Switzerland</option>
+          <option value="CA-QC">Quebec</option>
+          <option value="BR">Brazil</option>
+        </select>
+      </div>
+      <button class="btn" id="go" type="button">Load as this visitor</button>
+      <button class="btn btn--ghost" id="reset" type="button">Start over</button>
+      <button class="btn btn--ghost" id="session" type="button">Simulate a new visit</button>
+    </div>
+    <p class="note">This page uses a stand-in for Termly so the bar can be tried without a Termly account. "Start over" clears every choice. "Simulate a new visit" keeps your choice but starts a new session, which is when a visitor who declined is asked again.</p>
+    <p class="note"><strong>Saved record:</strong></p>
+    <div id="record" class="note">None yet.</div>
+  </div>
+
+  <h2>What happens</h2>
+  <ul>
+    <li><strong>Where the law calls for it,</strong> Termly shows the bar and holds back tracking until the visitor chooses. Everywhere else, the site works as usual.</li>
+    <li><strong>Three small tabs</strong> keep the bar slim: <em>Why this?</em> shows the visitor's state or country, its outline and the law that applies there; <em>What's collected</em> and <em>If you decline</em> answer the next two questions.</li>
+    <li><strong>Accept</strong> saves a first-party cookie, <code>trpl_cookie_consent</code>, with the date of acceptance. Termly keeps the official consent record.</li>
+    <li><strong>Decline</strong> brings up a note that some features may be less personal or may not load.</li>
+    <li><strong>A visitor who declined</strong> is asked again at the start of each new visit.</li>
+  </ul>
+
+  <h2>Install</h2>
+  <p>Put this first in the <code>&lt;head&gt;</code> of trlibrary.com, above Google Tag Manager. The Termly ID in it belongs to trlibrary.com.</p>
+<pre><code>&lt;script&gt;
+  window.__trplCookieBarQueueing = true;
+  window.TRPLCookieBar = { q: [] };
+  function onTermlyLoaded() {
+    Termly.on('initialized', function (d) { TRPLCookieBar.q.push(['initialized', d]); });
+    Termly.on('consent', function (d) { TRPLCookieBar.q.push(['consent', d]); });
+  }
+&lt;/script&gt;
+&lt;script src="https://app.termly.io/resource-blocker/d00ef422-03f1-4cca-9773-63a1ea4a3b8d?autoBlock=on" onload="onTermlyLoaded()"&gt;&lt;/script&gt;
+&lt;script src="https://cookiebar.labs.trlibrary.com/cookiebar.js" defer&gt;&lt;/script&gt;</code></pre>
+  <p>Full setup, the Google Tag Manager steps and the legal review list are in the <a href="https://github.com/Theodore-Roosevelt-Presidential-Library/CookieBar">CookieBar repository</a>.</p>
+</main>
+
+<footer>
+  <div class="wrap">Theodore Roosevelt Presidential Library · Brand from <a href="https://brand.labs.trlibrary.com">brand.labs.trlibrary.com</a> · Law text is a draft pending legal review.</div>
+</footer>
+
+<script>
+  (function () {
+    var p = new URLSearchParams(location.search);
+    var sel = document.getElementById('region');
+    sel.value = (p.get('region') || 'US-CA').toUpperCase();
+    function go(v) {
+      var q = new URLSearchParams(location.search);
+      q.set('region', v);
+      q.set('show', v === 'US-ND' ? 'no' : 'yes');
+      location.search = q.toString();
+    }
+    document.getElementById('go').onclick = function () { go(sel.value); };
+    document.getElementById('reset').onclick = function () {
+      try { localStorage.clear(); sessionStorage.clear(); } catch (e) {}
+      document.cookie = 'trpl_cookie_consent=; path=/; max-age=0';
+      go(sel.value);
+    };
+    document.getElementById('session').onclick = function () {
+      try { sessionStorage.clear(); } catch (e) {}
+      go(sel.value);
+    };
+    function showRecord() {
+      var r = window.TRPLCookieBar && window.TRPLCookieBar.record && window.TRPLCookieBar.record();
+      document.getElementById('record').textContent = r ? JSON.stringify(r, null, 2) : 'None yet.';
+    }
+    setInterval(showRecord, 800);
+  })();
+</script>
+
+<!-- Same install pattern as production, with the demo stand-in in place of Termly -->
+<script>
+  window.__trplCookieBarQueueing = true;
+  window.TRPLCookieBar = { q: [] };
+  window.TRPLCookieBarConfig = { cookieDomain: '' };
+  function onTermlyLoaded() {
+    Termly.on('initialized', function (d) { TRPLCookieBar.q.push(['initialized', d]); });
+    Termly.on('consent', function (d) { TRPLCookieBar.q.push(['consent', d]); });
+  }
+</script>
+<script src="demo/mock-termly.js"></script>
+<script src="cookiebar.js" defer></script>
+</body>
+</html>

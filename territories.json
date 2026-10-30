@@ -1,0 +1,59 @@
+{
+  "version": "2026-10-29",
+  "reviewStatus": "DRAFT — not yet reviewed by counsel. Do not launch until each entry is approved.",
+  "groups": {
+    "EEA": ["AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "GR", "HU", "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PL", "PT", "RO", "SK", "SI", "ES", "SE", "IS", "LI", "NO"]
+  },
+  "fallback": {
+    "law": "Some privacy laws require websites to ask before using cookies that aren't essential to how the site works."
+  },
+  "territories": {
+    "EEA": {
+      "law": "European privacy law, under the ePrivacy Directive and the General Data Protection Regulation (GDPR), requires websites to ask before storing cookies that aren't essential on your device.",
+      "source": "https://eur-lex.europa.eu/eli/reg/2016/679/oj"
+    },
+    "GB": {
+      "place": "United Kingdom",
+      "law": "The UK's Privacy and Electronic Communications Regulations (PECR) and UK GDPR require websites to ask before storing most cookies that aren't essential on your device.",
+      "source": "https://www.legislation.gov.uk/uksi/2003/2426/contents"
+    },
+    "CH": {
+      "law": "Switzerland's Federal Act on Data Protection (FADP) requires websites to be clear about how they use your personal data and gives you a say in that use.",
+      "source": "https://www.fedlex.admin.ch/eli/cc/2022/491/en"
+    },
+    "BR": {
+      "law": "Brazil's General Data Protection Law (LGPD) requires a legal basis, such as your consent, before a website uses your personal data.",
+      "source": "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm"
+    },
+    "CA-QC": {
+      "law": "Quebec's privacy law, as updated by Law 25, requires technology that can identify, locate or profile you to stay off until you choose to turn it on.",
+      "source": "https://www.legisquebec.gouv.qc.ca/en/document/cs/P-39.1"
+    },
+    "US-CA": {
+      "law": "California's privacy laws, including the California Consumer Privacy Act (CCPA), give you the right to know about and opt out of the sale and sharing of your personal information.",
+      "source": "https://oag.ca.gov/privacy/ccpa"
+    },
+    "US-CO": { "law": "The Colorado Privacy Act gives Colorado residents the right to opt out of targeted advertising and the sale of personal data." },
+    "US-CT": { "law": "The Connecticut Data Privacy Act gives Connecticut residents the right to opt out of targeted advertising and the sale of personal data." },
+    "US-DE": { "law": "The Delaware Personal Data Privacy Act gives Delaware residents the right to opt out of targeted advertising and the sale of personal data." },
+    "US-IA": { "law": "Iowa's consumer data protection law gives Iowa residents the right to opt out of targeted advertising and the sale of personal data." },
+    "US-IN": { "law": "The Indiana Consumer Data Protection Act gives Indiana residents the right to opt out of targeted advertising and the sale of personal data." },
+    "US-KY": { "law": "The Kentucky Consumer Data Protection Act gives Kentucky residents the right to opt out of targeted advertising and the sale of personal data." },
+    "US-MD": { "law": "The Maryland Online Data Privacy Act gives Maryland residents the right to opt out of targeted advertising and the sale of personal data." },
+    "US-MN": { "law": "The Minnesota Consumer Data Privacy Act gives Minnesota residents the right to opt out of targeted advertising and the sale of personal data." },
+    "US-MT": { "law": "The Montana Consumer Data Privacy Act gives Montana residents the right to opt out of targeted advertising and the sale of personal data." },
+    "US-NE": { "law": "The Nebraska Data Privacy Act gives Nebraska residents the right to opt out of targeted advertising and the sale of personal data." },
+    "US-NH": { "law": "New Hampshire's consumer privacy law gives New Hampshire residents the right to opt out of targeted advertising and the sale of personal data." },
+    "US-NJ": { "law": "New Jersey's data privacy law gives New Jersey residents the right to opt out of targeted advertising and the sale of personal data." },
+    "US-OR": { "law": "The Oregon Consumer Privacy Act gives Oregon residents the right to opt out of targeted advertising and the sale of personal data." },
+    "US-RI": { "law": "The Rhode Island Data Transparency and Privacy Protection Act gives Rhode Island residents the right to opt out of targeted advertising and the sale of personal data." },
+    "US-TN": { "law": "The Tennessee Information Protection Act gives Tennessee residents the right to opt out of targeted advertising and the sale of personal data." },
+    "US-TX": { "law": "The Texas Data Privacy and Security Act gives Texas residents the right to opt out of targeted advertising and the sale of personal data." },
+    "US-UT": { "law": "The Utah Consumer Privacy Act gives Utah residents the right to opt out of targeted advertising and the sale of personal data." },
+    "US-VA": { "law": "The Virginia Consumer Data Protection Act gives Virginia residents the right to opt out of targeted advertising and the sale of personal data." },
+    "US-AL": {
+      "effective": "2027-05-01",
+      "law": "The Alabama Personal Data Protection Act gives Alabama residents the right to opt out of targeted advertising and the sale of personal data."
+    }
+  }
+}
