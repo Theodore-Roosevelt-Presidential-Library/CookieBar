@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import { geoPath, geoMercator, geoConicEqualArea, geoArea, geoCentroid, geoDistance } from 'd3-geo';
 import { feature } from 'topojson-client';
 import { presimplify, simplify } from 'topojson-simplify';
+import { topology } from 'topojson-server';
 
 const OUT = process.argv[2];
 fs.mkdirSync(OUT, { recursive: true });
@@ -55,5 +56,20 @@ for (const [code, num] of Object.entries(ISO)) {
   if (!f) { report.push(code + ':MISSING'); continue; }
   f = mainland(f, code === 'NO' ? 12 : code === 'GR' ? 8 : 15);
   report.push(`${code}:${write(code, f, geoMercator())}`);
+}
+// Canadian provinces (Natural Earth admin-1, 50m, public domain)
+const NE_ADMIN1 = process.argv[3];
+if (NE_ADMIN1 && fs.existsSync(NE_ADMIN1)) {
+  const raw = JSON.parse(fs.readFileSync(NE_ADMIN1));
+  raw.features = raw.features.filter(f => (f.properties.iso_3166_2 || '').startsWith('CA-'));
+  let topo = topology({ p: raw }, 1e5);
+  topo = simplify(presimplify(topo), 2e-3);
+  const gj = feature(topo, topo.objects.p);
+  for (const f of gj.features) {
+    const code = f.properties.iso_3166_2;
+    if (!code || !code.startsWith('CA-')) continue;
+    const g = mainland(f, 12);
+    report.push(`${code}:${write(code, g, geoConicEqualArea().rotate([96, 0]).parallels([50, 70]))}`);
+  }
 }
 console.log(report.join(' '));

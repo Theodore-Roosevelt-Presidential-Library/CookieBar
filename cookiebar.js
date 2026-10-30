@@ -183,7 +183,7 @@
     if (!loc || !loc.country) return null;
     var c = String(loc.country).toUpperCase();
     var sub = subdivisionCode(c, loc.state);
-    return c === 'US' && sub ? 'US-' + sub : c;
+    return (c === 'US' || c === 'CA') && sub ? c + '-' + sub : c;
   }
 
   function loadShape() {
