@@ -2,27 +2,39 @@
 
 Container: **GTM-N3888GS9** (trlibrary.com).
 
-Before this work, trlibrary.com had no consent management: GTM loaded with no Consent Mode defaults, so every tag fired for every visitor (checked October 29, 2026).
+Before this work, trlibrary.com had no consent management: GTM loaded with no Consent Mode defaults, so every tag fired for every visitor (checked October 29, 2026). The Drupal Google Tag module's own Consent Mode option is off; leave it off, since Termly's template sets the defaults.
 
-## 1. Load order (the part that makes it legal)
+## 1. How Termly and CookieBar load
 
-Termly and CookieBar go **above** the GTM snippet in the Drupal theme's `<head>`. Termly has to:
+Both load from GTM, following Termly's guide ([How to use Termly with Google Tag Manager](https://support.termly.io/hc/en-us/articles/30710480660881-How-to-use-Termly-with-Google-Tag-Manager)).
 
-- set Google Consent Mode defaults (`denied` where consent comes first) **before** GTM loads, and
-- start its auto-blocker before any tracking script runs.
+| Tag | Type | Triggers | Priority | Consent setting |
+|---|---|---|---|---|
+| **Termly – Consent Mode** | Termly Consent Management Platform (gallery template) | Consent Initialization – All Pages; `userPrefUpdate` (custom event) | 0 | No additional consent required |
+| **CookieBar – Loader** | Custom HTML, from `gtm/cookiebar-tag.html` | Consent Initialization – All Pages | 100 | No additional consent required |
 
-This can't be done from inside GTM. Ask FiveJars to add the snippet from the README above the GTM snippet on every page. This is the one exception to "everything goes through GTM."
+Termly template settings: **Inject Termly consent management platform script tag** on, website UUID `d00ef422-03f1-4cca-9773-63a1ea4a3b8d`. Regional defaults: **denied** for `ad_storage`, `ad_user_data`, `ad_personalization`, `analytics_storage`, `personalization_storage`, `functionality_storage` in the opt-in regions; `security_storage` granted. Wait for update: 500 ms.
 
-## 2. Termly: turn on Google Consent Mode
+Triggers to create:
 
-Termly dashboard → **Consent Management → Consent Banner** → for each region that needs consent first:
+- `userPrefUpdate`: Custom Event, event name `userPrefUpdate`.
+- `Termly.consentSaveDone`: Custom Event, event name `Termly.consentSaveDone`. Add it as a second firing trigger to non-Google tags that normally fire on page view, so they fire as soon as a visitor accepts.
 
-- **Google Consent Mode: on**
-- Defaults: `ad_storage`, `ad_user_data`, `ad_personalization`, `analytics_storage`, `personalization_storage` = **denied**. `security_storage` = granted. `functionality_storage` = granted only if it covers nothing but site function.
-- **Wait for update:** 500 ms.
-- Leave **URL passthrough** and **ads data redaction** off unless the ads team asks for them.
+CookieBar's loader runs first (priority 100), so it is listening before Termly starts and receives Termly's location event.
 
-Check it with `node scripts/termly.mjs banner`.
+### Scripts outside GTM
+
+Termly's Auto Blocker can't run when Termly loads from GTM. These load directly from Drupal (checked October 29, 2026) and **will run before consent** until they move into GTM with a consent setting:
+
+| Script | Loaded by | Suggested GTM consent |
+|---|---|---|
+| Hotjar (site 3866061) | Drupal Hotjar module | `analytics_storage` |
+| Mailchimp connected-site script (chimpstatic.com) | Theme file `themes/custom/trpl/js/mailchimp.js` | `ad_storage` |
+| Deyra AI chat widget | Drupal Asset Injector ("ai_chat") | Ask counsel; likely functional |
+
+## 2. Termly dashboard: Google Consent Mode
+
+Termly dashboard → **Consent Management → Consent Banner** → each opt-in region: **Google Consent Mode** on (Basic). Already set for Europe, Brazil, Canada, California and the privacy-law states.
 
 ## 3. GTM container settings
 
@@ -69,6 +81,6 @@ Add **Cookie settings** to the site footer (Drupal menu or block):
 ## 6. Still to check
 
 - [ ] List every tag in GTM-N3888GS9 and assign its consent type (step 3).
-- [ ] Find any tracking hard-coded in Drupal **outside** GTM. Termly's auto-blocker catches known trackers, but each one should be confirmed in a test.
+- [ ] Move Hotjar, the Mailchimp site script and the chat widget into GTM (see "Scripts outside GTM").
 - [ ] Shopify store, ticketing, and the labs tools: decide whether they need their own banner. Shopify has its own Customer Privacy API.
 - [ ] Embedded YouTube: Termly blocks it under social networking until consent. Consider youtube-nocookie.com embeds so videos still play.

@@ -31,15 +31,28 @@ CookieBar uses only Termly's documented hooks: `Termly.on('initialized' | 'conse
 | `scripts/termly.mjs` | Termly API helper: check keys, read banner settings, push the brand theme |
 | `.env.example` | Template for your Termly API keys |
 | `docs/GTM.md` | Google Tag Manager setup |
+| `gtm/cookiebar-tag.html` | The CookieBar Custom HTML tag for GTM |
 | `docs/LEGAL-REVIEW.md` | What counsel needs to approve before launch |
 
 ## Termly API
 
 `scripts/termly.mjs` uses Termly's partner API, which needs a **public and private key pair**. The single API key in the Termly dashboard (Settings → API Key) is a different kind of token and is rejected by that API (tested October 29, 2026). Nothing in CookieBar needs an API key; Termly is configured in its dashboard. Keep the script for the day Termly issues partner keys, and keep any key in `.env`, which is git-ignored. GitHub Pages publishes everything else in this repository.
 
-## Install on trlibrary.com
+## Install on trlibrary.com (through GTM)
 
-The snippet goes **first in the `<head>`, above Google Tag Manager**, in the Drupal theme (a FiveJars request). It can't go inside GTM: Termly has to block trackers and set Consent Mode defaults before GTM loads.
+trlibrary.com loads Termly and CookieBar from Google Tag Manager (container GTM-N3888GS9), so no Drupal change is needed. Full steps are in `docs/GTM.md`. In short:
+
+1. **Termly Consent Management Platform** template tag (from the GTM Community Template Gallery) on **Consent Initialization – All Pages** and a `userPrefUpdate` custom event, with "Inject Termly consent management platform script tag" on and website UUID `d00ef422-03f1-4cca-9773-63a1ea4a3b8d`.
+2. **CookieBar – Loader** Custom HTML tag on **Consent Initialization – All Pages**, priority 100, using `gtm/cookiebar-tag.html`.
+3. Consent settings on every other tag.
+
+`d00ef422-03f1-4cca-9773-63a1ea4a3b8d` is the trlibrary.com website in Termly. It is public; it appears in page source.
+
+**Limit of the GTM route:** Termly's Auto Blocker can't run when Termly loads from GTM, so only tags inside GTM are held back. Scripts that Drupal loads directly must move into GTM or they will run before consent (see `docs/GTM.md`, "Scripts outside GTM").
+
+### Alternative: install in the page head
+
+If FiveJars ever installs Termly directly, put this first in the `<head>`, above GTM, and keep Auto Blocker on:
 
 ```html
 <script>
@@ -54,7 +67,7 @@ The snippet goes **first in the `<head>`, above Google Tag Manager**, in the Dru
 <script src="https://cookiebar.labs.trlibrary.com/cookiebar.js" defer></script>
 ```
 
-`d00ef422-03f1-4cca-9773-63a1ea4a3b8d` is the trlibrary.com website in Termly (public; it appears in page source). This matches Termly's own Plain HTML install code, with `onload="onTermlyLoaded()"` added.
+Then remove the GTM Termly and CookieBar tags so they don't load twice.
 
 Add a **Cookie settings** link to the site footer so visitors can change their mind (required in the EU):
 

@@ -89,18 +89,7 @@
   </ul>
 
   <h2>Install</h2>
-  <p>Put this first in the <code>&lt;head&gt;</code> of trlibrary.com, above Google Tag Manager. The Termly ID in it belongs to trlibrary.com.</p>
-<pre><code>&lt;script&gt;
-  window.__trplCookieBarQueueing = true;
-  window.TRPLCookieBar = { q: [] };
-  function onTermlyLoaded() {
-    Termly.on('initialized', function (d) { TRPLCookieBar.q.push(['initialized', d]); });
-    Termly.on('consent', function (d) { TRPLCookieBar.q.push(['consent', d]); });
-  }
-&lt;/script&gt;
-&lt;script src="https://app.termly.io/resource-blocker/d00ef422-03f1-4cca-9773-63a1ea4a3b8d?autoBlock=on" onload="onTermlyLoaded()"&gt;&lt;/script&gt;
-&lt;script src="https://cookiebar.labs.trlibrary.com/cookiebar.js" defer&gt;&lt;/script&gt;</code></pre>
-  <p>Full setup, the Google Tag Manager steps and the legal review list are in the <a href="https://github.com/Theodore-Roosevelt-Presidential-Library/CookieBar">CookieBar repository</a>.</p>
+  <p>trlibrary.com loads Termly and CookieBar through Google Tag Manager: Termly's template tag and a small CookieBar loader tag, both on the Consent Initialization trigger. The steps, the loader tag and the legal review list are in the <a href="https://github.com/Theodore-Roosevelt-Presidential-Library/CookieBar">CookieBar repository</a>.</p>
 </main>
 
 <footer>
